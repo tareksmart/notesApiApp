@@ -1,4 +1,8 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:notesapi/component/crud.dart';
+import 'package:notesapi/component/link_api.dart';
 
 import 'package:notesapi/custom_text_field.dart';
 import 'package:notesapi/routes/routes.dart';
@@ -11,13 +15,35 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  GlobalKey<FormState> formState = GlobalKey();
+  TextEditingController email_cont = new TextEditingController();
+  TextEditingController pass_cont = new TextEditingController();
+  crud cru = crud();
+  bool isloading=false;
+  login() async {
+    isloading = true;
+      setState(() {});
+    var respons = await cru.postRequest(
+        linkLogIn, {"email": email_cont.text, "password":pass_cont.text });
+    if (respons['status'] == "success") {
+      Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false);
+      isloading = false;
+      setState(() {});
+     
+    }
+    else
+    {
+       isloading = false;
+      setState(() {});
+    AwesomeDialog(context: context,title: 'تنبيه',dialogType: DialogType.INFO,body:Text('wrong data') ).show();
+     
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> formState = GlobalKey();
-    TextEditingController email_cont = new TextEditingController();
-    TextEditingController pass_cont = new TextEditingController();
     return Scaffold(
-      body: ListView(
+      body:isloading==true?Center(child: CircularProgressIndicator(),): ListView(
         children: [
           Form(
               key: formState,
@@ -37,8 +63,8 @@ class _LogInState extends State<LogIn> {
                     controller: pass_cont,
                   ),
                   MaterialButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.home);
+                    onPressed: () async{
+                     await login();
                     },
                     child: Text('login'),
                     color: Colors.blueGrey[600],
