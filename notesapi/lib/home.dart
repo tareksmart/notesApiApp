@@ -2,6 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:notesapi/component/card_note.dart';
+import 'package:notesapi/component/crud.dart';
+import 'package:notesapi/component/link_api.dart';
+import 'package:notesapi/main.dart';
+import 'package:notesapi/routes/routes.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -10,7 +15,16 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with crud {
+
+getNotes()async{
+var respons=postRequest(linkView, {
+  "notes_userid":sharedPref.getString('id')
+});
+if(respons['status']=="sucess")
+return respons;
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,37 +34,33 @@ class _HomeState extends State<Home> {
       ),
       appBar: AppBar(
         title: Text('home'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                sharedPref.clear();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(Routes.login, (route) => false);
+              },
+              icon: Icon(Icons.exit_to_app))
+        ],
       ),
       body: ListView(children: [
-        Card(
-          margin: EdgeInsets.all(8),
-          elevation: 8,
-          child: Row(
-            children: [
-              Expanded(
-                child: Image.asset(
-                  'images/note.png',
-                  height: 100,
-                  width: 50,
-                  fit: BoxFit.cover,
-                ),
-                flex: 1,
-              ),
-              Expanded(
-                child: ListTile(
-                  title: Text('note title'),
-                  subtitle: Text('note details'),
-                ),
-                flex: 3,
-              ),
-              InkWell(
-                highlightColor: Colors.blue,
-                child: Icon(Icons.edit),
-                onTap: () {},
-              ),
-            ],
-          ),
-        )
+        FutureBuilder(
+          future: getNotes(),
+          builder: ( (context, snapshot) {
+            if(snapshot.connectionState==ConnectionState.waiting)
+            {
+              return Center(child: CircularProgressIndicator(),);
+            }
+            if(snapshot.hasData)
+            {
+              return ListView.builder<snapshot.data>(
+                itemCount: snapshot.data['data'].lenght,
+                itemBuilder: itemBuilder)
+            }
+            
+          }))
+      
       ]),
     );
   }
