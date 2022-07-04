@@ -18,7 +18,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with crud {
 
 getNotes()async{
-var respons=postRequest(linkView, {
+var respons=await postRequest(linkView, {
   "notes_userid":sharedPref.getString('id')
 });
 if(respons['status']=="sucess")
@@ -47,18 +47,25 @@ return respons;
       body: ListView(children: [
         FutureBuilder(
           future: getNotes(),
-          builder: ( (context, snapshot) {
-            if(snapshot.connectionState==ConnectionState.waiting)
-            {
-              return Center(child: CircularProgressIndicator(),);
-            }
+          builder: ( (context,AsyncSnapshot snapshot) {
+           
             if(snapshot.hasData)
             {
-              return ListView.builder<snapshot.data>(
-                itemCount: snapshot.data['data'].lenght,
-                itemBuilder: itemBuilder)
+             return ListView.builder(
+              itemCount: snapshot.data?.length,
+              itemBuilder: ((context, index) {
+
+                return Text("${snapshot.data['data'][index]['notes_content']}");
+                
+              }));
+              // ignore: dead_code
+              if(snapshot.connectionState==ConnectionState.waiting){
+                return Center(child: Text('loading'));
+              }
+               
+
             }
-            
+            return Center(child: Text('loading'));
           }))
       
       ]),
