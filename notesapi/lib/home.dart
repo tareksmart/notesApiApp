@@ -8,6 +8,7 @@ import 'package:notesapi/component/card_note.dart';
 import 'package:notesapi/component/crud.dart';
 import 'package:notesapi/component/link_api.dart';
 import 'package:notesapi/main.dart';
+import 'package:notesapi/notes/edite.dart';
 import 'package:notesapi/routes/routes.dart';
 
 class Home extends StatefulWidget {
@@ -30,7 +31,9 @@ class _HomeState extends State<Home> with crud {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushReplacementNamed(Routes.add);
+        },
       ),
       appBar: AppBar(
         title: Text('home'),
@@ -51,23 +54,34 @@ class _HomeState extends State<Home> with crud {
               future: getNotes(),
               builder: ((context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data['status'] == 'no success') 
+                  if (snapshot.data['status'] == 'no success')
                     return Center(
                       child: Text('no notes found'),
                     );
-                  
-                    return ListView.builder(
-                        itemCount: snapshot.data['data']?.length,
-                        shrinkWrap: true,
-                        itemBuilder: ((context, index) {
-                          print(' index ${index}');
-                          return CardNotes(
-                              title:
-                                  "${snapshot.data['data'][index]['notes_title']}",
-                              content:
-                                  "${snapshot.data['data'][index]['notes_content']}",
-                              ontap: () {});
-                        }));
+
+                  return ListView.builder(
+                      itemCount: snapshot.data['data']?.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: ((context, index) {
+                        print(' index ${index}');
+                        return InkWell(
+                          onTap:()=>Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (ctx) {
+                                return Edite(notes: snapshot.data['data'][index]);
+                              })) ,
+                          child: CardNotes(
+                            ontap: () {
+                              print('tapppppppppppped');
+                              
+                            },
+                            title:
+                                "${snapshot.data['data'][index]['notes_title']}",
+                            content:
+                                "${snapshot.data['data'][index]['notes_content']}",
+                          ),
+                        );
+                      }));
                   // ignore: dead_code
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: Text('loading'));

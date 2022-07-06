@@ -7,6 +7,7 @@ import 'package:notesapi/component/link_api.dart';
 import 'package:notesapi/custom_text_field.dart';
 import 'package:notesapi/main.dart';
 import 'package:notesapi/routes/routes.dart';
+import 'package:notesapi/validation/validate.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -64,10 +65,13 @@ class _LogInState extends State<LogIn> {
                           height: 150,
                         ),
                         CustomTextField(
+                          valid:validInputNoteScreen(email_cont.text) ,
+                       
                           hint: 'email',
                           controller: email_cont,
                         ),
                         CustomTextField(
+                          valid:validInputNoteScreen(pass_cont.text) ,
                           hint: 'password',
                           controller: pass_cont,
                         ),
