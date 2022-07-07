@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:notesapi/model/note_model.dart';
 
 class CardNotes extends StatelessWidget {
   void Function()? ontap;
+  final note_model noteModel;
   final String title;
   final String content;
-  CardNotes({Key? key, required this.title, required this.content,required ontap}) : super(key: key);
+  Widget child;
+  CardNotes(
+      {Key? key, required ontap, required this.child, required this.noteModel,required this.title,
+      required this.content})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +20,9 @@ class CardNotes extends StatelessWidget {
       child: InkWell(
         onTap: ontap,
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+          ),
           margin: EdgeInsets.all(8),
           elevation: 8,
           child: Row(
@@ -29,12 +38,12 @@ class CardNotes extends StatelessWidget {
               ),
               Expanded(
                 child: ListTile(
-                  title: Text('$title'),
-                  subtitle: Text('$content'),
+                  title: Text(noteModel.notesTitle.toString()),
+                  subtitle: Text('${noteModel.notesContent}'),
                 ),
                 flex: 3,
               ),
-           
+              child
             ],
           ),
         ),

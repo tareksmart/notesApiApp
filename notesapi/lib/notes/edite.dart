@@ -31,7 +31,7 @@ class _EditeState extends State<Edite> with crud {
       "notes_content": contentCon.text,
       "notes_id": widget.notes["notes_id"].toString()
     });
-    //print(response + 'editeeeeeeeee');
+    
     if (response['status'] == "success") {
       return response;
     } else {

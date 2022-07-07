@@ -7,8 +7,11 @@ class CustomTextField extends StatelessWidget {
   final String hint;
   final String? Function(String?) valid;
   TextEditingController controller = TextEditingController();
-  CustomTextField({Key? key, required this.hint, 
-  required this.controller, required this.valid})
+  CustomTextField(
+      {Key? key,
+      required this.hint,
+      required this.controller,
+      required this.valid})
       : super(key: key);
 
   @override
@@ -17,7 +20,6 @@ class CustomTextField extends StatelessWidget {
       margin: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
       child: TextFormField(
         validator: valid,
-        
         controller: controller,
         decoration: InputDecoration(
             labelText: hint,
