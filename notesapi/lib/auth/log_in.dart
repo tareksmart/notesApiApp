@@ -41,6 +41,7 @@ class _LogInState extends State<LogIn> {
       isloading = false;
       setState(() {});
       AwesomeDialog(
+        
               context: context,
               title: 'تنبيه',
               dialogType: DialogType.INFO,

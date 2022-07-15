@@ -29,17 +29,17 @@ class _AddState extends State<Add> with crud {
   GlobalKey<FormState> _formstateKey = GlobalKey();
 
   add() async {
-    if (myFile == null) 
+    if (myFile == null)
       return AwesomeDialog(
-          context: context, title: 'message', 
-          body: Text('take pic first')).show();
-    
+              context: context, title: 'message', body: Text('take pic first'))
+          .show();
+
     var respons = await postRequestWithfile(
         myFile!,
         {
           "notes_content": contentCont.text,
           "notes_title": titleCont.text,
-          "notes_userid": sharedPref.get('id')
+          "notes_userid": sharedPref.get("id")
         },
         linkAdd);
 
@@ -59,8 +59,8 @@ class _AddState extends State<Add> with crud {
             CustomTextField(
               key: ValueKey('title'),
               valid: (val) {
-                if(val!.isEmpty)
-                return validInputNoteScreen(contentCont.text.trim());
+                if (val!.isEmpty)
+                  return validInputNoteScreen(contentCont.text.trim());
               },
               hint: 'title',
               controller: titleCont,
@@ -68,8 +68,8 @@ class _AddState extends State<Add> with crud {
             CustomTextField(
               key: ValueKey('content'),
               valid: (val) {
-                if(val!.isEmpty)
-                return validInputNoteScreen(contentCont.text.trim());
+                if (val!.isEmpty)
+                  return validInputNoteScreen(contentCont.text.trim());
               },
               hint: 'content',
               controller: contentCont,
@@ -90,9 +90,7 @@ class _AddState extends State<Add> with crud {
                                   XFile? xfile = await ImagePicker()
                                       .pickImage(source: ImageSource.gallery);
                                   myFile = File(xfile!.path);
-                                  setState(() {
-                                    
-                                  });
+                                  setState(() {});
                                   Navigator.pop(context);
                                 },
                                 child: Text(
@@ -110,9 +108,7 @@ class _AddState extends State<Add> with crud {
                                   XFile? xcamFile = await ImagePicker()
                                       .pickImage(source: ImageSource.camera);
                                   myFile = File(xcamFile!.path);
-                                  setState(() {
-                                    
-                                  });
+                                  setState(() {});
                                   Navigator.pop(context);
                                 },
                                 child: Text(
@@ -129,17 +125,17 @@ class _AddState extends State<Add> with crud {
                     });
               },
               child: Text('choose image'),
-              color:myFile==null? Colors.blue:Colors.green,
+              color: myFile == null ? Colors.blue : Colors.green,
             ),
             MaterialButton(
-              onPressed: () {
+              onPressed: () async{
                 final valid = _formstateKey.currentState?.validate();
                 if (valid!) {
                   _formstateKey.currentState?.save();
-                  add();
+                await add();
 
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, Routes.home, (route) => false);
+                  Navigator.pushReplacementNamed(
+                      context, Routes.home);
                 }
               },
               child: Icon(Icons.add),

@@ -99,7 +99,7 @@ class _HomeState extends State<Home> with crud {
                               "${snapshot.data['data'][index]['notes_title']}",
                           content:
                               "${snapshot.data['data'][index]['notes_content']}",
-                          child: Delete(
+                          child: Delete(imageName: snapshot.data['data'][index]['notes_image'],
                               noteId: snapshot.data['data'][index]['notes_id']),
                         ),
                       );

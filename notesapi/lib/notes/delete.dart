@@ -6,11 +6,14 @@ import 'package:notesapi/component/link_api.dart';
 import 'package:notesapi/routes/routes.dart';
 
 class Delete extends StatelessWidget with crud {
-  final int noteId;
+  final int? noteId;
+  final String? imageName;
+  const Delete({Key? key, required this.noteId, required this.imageName})
+      : super(key: key);
+
   delete() async {
-    var response = await postRequest(linkDelete, {
-      "notes_id": this.noteId.toString()}
-      );
+    var response = await postRequest(linkDelete,
+        {"notes_id": this.noteId.toString(), "imageName": imageName});
 
     if (response['status'] == "success") {
       return response;
@@ -20,8 +23,6 @@ class Delete extends StatelessWidget with crud {
       );
     }
   }
-
-  const Delete({Key? key, required this.noteId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
