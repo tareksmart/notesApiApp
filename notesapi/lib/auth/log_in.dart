@@ -28,7 +28,10 @@ class _LogInState extends State<LogIn> {
     var respons = await cru.postRequest(
         linkLogIn, {"email": email_cont.text, "password": pass_cont.text});
     if (respons['status'] == "success") {
-      sharedPref.setString("id", respons['data']['id'].toString());
+      print('inside log in');
+      
+      sharedPref.setString("id", respons['data']['user_id'].toString());
+      print(respons['data']['user_id']);
       sharedPref.setString("user_name", respons['data']['user_name'].toString());
       sharedPref.setString("email", respons['data']['email'].toString());
       Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false);
@@ -65,13 +68,24 @@ class _LogInState extends State<LogIn> {
                           height: 150,
                         ),
                         CustomTextField(
-                          valid:validInputNoteScreen(email_cont.text) ,
+                          key: ValueKey('email'),
+                          valid:(value){
+                            if(value!.isEmpty||value.contains('@')){
+                              return 'please enter email';
+                            }
+                          } ,
                        
                           hint: 'email',
                           controller: email_cont,
                         ),
                         CustomTextField(
-                          valid:validInputNoteScreen(pass_cont.text) ,
+                          key: ValueKey('pass'),
+                          valid:(value){
+                            if(value!.isEmpty){
+                              return 'pleae enter pass';
+
+                            }
+                          } ,
                           hint: 'password',
                           controller: pass_cont,
                         ),

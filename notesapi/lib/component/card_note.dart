@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:notesapi/component/link_api.dart';
 import 'package:notesapi/model/note_model.dart';
 
 class CardNotes extends StatelessWidget {
@@ -28,8 +29,8 @@ class CardNotes extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Image.asset(
-                  'images/note.png',
+                child: Image.network(
+                  '$linkImage/${noteModel.notesImage}',
                   height: 100,
                   width: 50,
                   fit: BoxFit.cover,

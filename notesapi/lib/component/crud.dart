@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 class crud {
   //للحصول على البيانات مثل select
@@ -30,5 +32,33 @@ class crud {
     } catch (e) {
       print('errorrrrrrrr $e');
     }
+  }
+
+  postRequestWithfile(File file, Map data, String url) async {
+    var request = http.MultipartRequest("POST", Uri.parse(url));
+
+    var lenght = await file.length();
+    var stream = http.ByteStream(file.openRead());
+
+    var multiPartfile = http.MultipartFile("notes_image", stream, lenght,
+        filename: basename(file.path));
+
+        request.files.add(multiPartfile);
+
+        data.forEach((key, value) { 
+          request.fields[key]=value;
+        });
+
+        var myrequest=await request.send();
+        
+        var response=await http.Response.fromStream(myrequest);
+        if(myrequest.statusCode==200){
+          print(response.body);
+          return jsonDecode(response.body);
+        }
+        else
+        {
+          print('error ${myrequest.statusCode}');
+        }
   }
 }

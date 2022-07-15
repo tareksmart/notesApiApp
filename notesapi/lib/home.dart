@@ -22,14 +22,25 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with crud {
+
+
   late int _noteId = 0;
   getNotes() async {
     var respons = await postRequest(
-        linkView, {"notes_userid": sharedPref.getString('id')});
-    print(respons);
-    if (respons['status'] == "success") return respons;
+        linkView, {"notes_userid": sharedPref.getString("id")});
+       // print(sharedPref.getString("id"));
+  //  print(respons);
+    if (respons['status'] == "success") 
+    return respons;
   }
-
+@override
+  void initState() {
+    // TODO: implement initState
+    
+    setState(() {
+      
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +69,7 @@ class _HomeState extends State<Home> with crud {
               future: getNotes(),
               builder: ((context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data['status'] == 'no success')
+                  if (snapshot.data['status'] == 'no success***')
                     return Center(
                       child: Text('no notes found'),
                     );
@@ -68,9 +79,11 @@ class _HomeState extends State<Home> with crud {
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemBuilder: ((context, index) {
+                     // print('insi de list view');
+                      //print(snapshot.data);
                       _noteId = snapshot.data['data'][index]['notes_id'];
 
-                      print(' index ${index}');
+                     // print(' index ${index}');
                       return InkWell(
                         onTap: () => Navigator.of(context)
                             .push(MaterialPageRoute(builder: (ctx) {
@@ -80,7 +93,7 @@ class _HomeState extends State<Home> with crud {
                           noteModel:
                               note_model.fromJson(snapshot.data['data'][index]),
                           ontap: () {
-                            print('tapppppppppppped');
+                           // print('tapppppppppppped');
                           },
                           title:
                               "${snapshot.data['data'][index]['notes_title']}",

@@ -22,6 +22,7 @@ dependencies:
   fluttertoast:
   awesome_dialog: ^2.2.1
   shared_preferences: ^2.0.15
+  image_picker: ^0.8.5+3
 
 dev_dependencies:
   flutter_test:
