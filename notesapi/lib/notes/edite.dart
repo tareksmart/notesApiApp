@@ -33,12 +33,15 @@ class _EditeState extends State<Edite> with crud {
   edite() async {
     var response;
     if (myFile == null) {
+      print('file is null');
       response = await postRequest(linkEdite, {
         "notes_title": titleCon.text,
         "notes_content": contentCon.text,
-        "notes_id": widget.notes["notes_id"].toString()
+        "notes_id": widget.notes["notes_id"].toString(),
+         "notes_image": widget.notes["notes_image"].toString()
       });
     } else {
+       print('file is not null');
       response = await postRequestWithfile(
         myFile!,
         {
